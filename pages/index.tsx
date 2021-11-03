@@ -73,7 +73,8 @@ function randomLetter(): string {
 
 export async function getStaticProps(): Promise<any> {
   const letter = randomLetter();
-  const randomCocktails = await (await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${letter}`)).json();
+  const cocktailsFromAPI = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${letter}`);
+  const randomCocktails = await cocktailsFromAPI.json();
   return {
     props: {
       cocktails: randomCocktails.drinks,
