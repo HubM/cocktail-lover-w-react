@@ -3,23 +3,26 @@ import Head from 'next/head'
 import Image from "next/image";
 import styles from '../styles/Home.module.css'
 
-import { Cocktail } from '../types/cocktail'
+import CocktailInitial from '../types/cocktail/initial'
+import CocktailReformat from '../types/cocktail/reformat'
+
+import formatCocktail from "../helpers/formatCocktail";
 
 interface HomeProps {
-  cocktails: Cocktail[],
+  cocktails: CocktailReformat[],
   letter: string
 }
 
-function cocktailView(cocktail: Cocktail): JSX.Element {
+function cocktailView(cocktail: CocktailReformat): JSX.Element {
   return (
-    <li key={cocktail.idDrink}>
+    <li key={cocktail.id}>
       {
-        cocktail.strDrink && <h2>{cocktail.strDrink}</h2>
+        cocktail.title && <h2>{cocktail.title}</h2>
       }
       {
-        cocktail.strDrinkThumb &&
+        cocktail.thumbnail &&
         <Image
-          src={cocktail.strDrinkThumb}
+          src={cocktail.thumbnail}
           alt="{cocktailPicture of the author"
           width={500}
           height={500}
@@ -29,7 +32,7 @@ function cocktailView(cocktail: Cocktail): JSX.Element {
   )
 }
 
-function cocktailsList(cocktails: Cocktail[]): JSX.Element {
+function cocktailsList(cocktails: CocktailInitial[]): JSX.Element {
   if (!cocktails || !cocktails.length) {
     return (<p>Aucun cocktails de disponible 😔</p>)
   } 
@@ -75,9 +78,12 @@ export async function getStaticProps(): Promise<any> {
   const letter = randomLetter();
   const cocktailsFromAPI = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${letter}`);
   const randomCocktails = await cocktailsFromAPI.json();
+
+  const reformattedRandomCocktails = formatCocktail(randomCocktails.drinks);
+  
   return {
     props: {
-      cocktails: randomCocktails.drinks,
+      cocktails: reformattedRandomCocktails,
       letter
     }
   }
