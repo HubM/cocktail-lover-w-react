@@ -32,12 +32,12 @@ function cocktailView(cocktail: CocktailReformat): JSX.Element {
   )
 }
 
-function cocktailsList(cocktails: CocktailInitial[]): JSX.Element {
+function cocktailsList(cocktails: CocktailReformat[]): JSX.Element {
   if (!cocktails || !cocktails.length) {
     return (<p>Aucun cocktails de disponible 😔</p>)
   } 
   return (
-    <ul>
+    <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
       {
         cocktails.map(cocktail => cocktailView(cocktail))
       }
